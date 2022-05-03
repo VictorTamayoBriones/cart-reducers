@@ -61,13 +61,23 @@ export function cartReducer(state, action){
             
         }
         case TYPES.REMOVE_ONE_FROM_CART:{
+            let itemToDelete = state.cart.find( item => item.id === action.payload );
 
+            
+            return{
+                ...state,
+                cart: itemToDelete.quantity >1 
+                ? state.cart.map( item => item.id === action.payload ? {...item, quantity: item.quantity -1 } : item ) 
+                : state.cart.filter( item => item.id != action.payload )
+            }
+            
+            
         }
         case TYPES.REMOVE_ALL_FROM_CART:{
-
+            return{...state, cart: state.cart.filter( item => item.id != action.payload )}
         }
         case TYPES.CLEAR:{
-
+            return {...state, cart: []}
         }
     
         default:

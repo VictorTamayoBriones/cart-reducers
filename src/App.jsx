@@ -13,6 +13,10 @@ function App() {
 
   const addToCart = (id) =>{dispatch({type: TYPES.ADD_TO_CART, payload: id})}
 
+  const delItemFromCart = (action, id) => {dispatch({type: action, payload: id})}
+
+  const clearCart = ()=>{dispatch({type: TYPES.CLEAR})}
+
   return (
     <div className="main" >
       <Box>
@@ -23,9 +27,9 @@ function App() {
       <Box>
         <h2>Carrito</h2>
         <Buttons>
-          <button>Clear Cart</button>
+          <button onClick={clearCart} >Clear Cart</button>
         </Buttons>
-        { cart.length > 0 ? cart.map((product, index)=>(<CardProductOnCart key={index} data={product} />)) : <p>Carrito vacio</p> }
+        { cart.length > 0 ? cart.map((product, index)=>(<CardProductOnCart key={index} data={product} onDeleteItemFromCart={delItemFromCart}/>)) : <p>Carrito vacio</p> }
       </Box>
     </div>
   )
