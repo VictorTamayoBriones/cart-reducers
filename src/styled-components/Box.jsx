@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const Box = styled.article`
-    width: 45%;
+    width: 50%;
     display: flex;
     flex-wrap: wrap;
     padding: 10px;
