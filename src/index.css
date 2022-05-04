@@ -4,6 +4,11 @@
   box-sizing: border-box;
 }
 
+h2{
+  color: #fff;
+  -webkit-text-stroke: 1px orange;
+  font-size: 50px;
+}
 
 .main{
   width: 100%;
@@ -11,4 +16,13 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+}
+
+.products{
+  border-right: solid 5px orange;
+}
+
+.total{
+  color: teal;
+  font-size: 25px;
 }

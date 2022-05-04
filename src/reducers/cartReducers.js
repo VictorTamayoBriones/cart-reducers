@@ -39,7 +39,8 @@ export const CART_INITIAL_STATE = {
             stock: 60
         },
     ],
-    cart: []
+    cart: [],
+    totalToPay: 0
 }
 
 export function cartReducer(state, action){
@@ -47,16 +48,18 @@ export function cartReducer(state, action){
         case TYPES.ADD_TO_CART:{
             let newItem = state.products.find( item => item.id === action.payload);
             let itemInCart = state.cart.find(item => item.id === newItem.id);
+            let pay = state.cart.map( item => item.toPay ).reduce((acc, n) => acc + n, newItem.price)
             
             return itemInCart
             ? {...state,
                 cart: state.cart.map((item)=>
                     item.id === newItem.id 
-                        ?{...item, quantity: item.quantity +1}
+                        ?{...item, quantity: item.quantity +1, toPay: item.price * (item.quantity+1)}
                         : item
-                )
+                ),
+                totalToPay: pay
             }
-            : {...state, cart:[...state.cart, {...newItem, quantity: 1}]}
+            : {...state, cart:[...state.cart, {...newItem, quantity: 1, toPay: newItem.price}], totalToPay: state.totalToPay + newItem.price}
 
             
         }
@@ -67,17 +70,19 @@ export function cartReducer(state, action){
             return{
                 ...state,
                 cart: itemToDelete.quantity >1 
-                ? state.cart.map( item => item.id === action.payload ? {...item, quantity: item.quantity -1 } : item ) 
-                : state.cart.filter( item => item.id != action.payload )
+                ? state.cart.map( item => item.id === action.payload ? {...item, quantity: item.quantity -1, toPay: item.toPay - item.price } : item ) 
+                : state.cart.filter( item => item.id != action.payload ),
+                totalToPay: state.totalToPay - itemToDelete.price
             }
             
             
         }
         case TYPES.REMOVE_ALL_FROM_CART:{
-            return{...state, cart: state.cart.filter( item => item.id != action.payload )}
+            let itemToRemove = state.cart.find( item => item.id === action.payload )
+            return{...state, cart: state.cart.filter( item => item.id != action.payload ), totalToPay: state.totalToPay - itemToRemove.toPay}
         }
         case TYPES.CLEAR:{
-            return {...state, cart: []}
+            return {...state, cart: [], totalToPay: 0}
         }
     
         default:

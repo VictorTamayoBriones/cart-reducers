@@ -19,13 +19,14 @@ function App() {
 
   return (
     <div className="main" >
-      <Box>
+      <Box className="products" >
         <h2>Productos</h2>
         {products.map(product=>(<CardProduct key={product.id} data={product} onAddToCart={addToCart}/>))}
       </Box>
       
-      <Box>
+      <Box className="carrito" >
         <h2>Carrito</h2>
+        <p className="total" >↦ Total to pay: ${state.totalToPay}</p>
         <Buttons>
           <button onClick={clearCart} >Clear Cart</button>
         </Buttons>
